@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import ProviderCard from '@/components/ProviderCard'
+import {useUserStore} from "@/store";
 
 
 
@@ -27,9 +28,10 @@ const providers = [
 ];
 
 export default function HomeScreen() {
+    const { name } = useUserStore();
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Bienvenido </Text>
+            <Text style={styles.title}>Bienvenido {name}</Text>
             <Text style={styles.subtitle}>Lista de posibles proveedores:</Text>
             <FlatList
                 data={providers}
