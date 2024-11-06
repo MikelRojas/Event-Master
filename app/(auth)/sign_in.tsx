@@ -27,7 +27,7 @@ const SignInScreen: React.FC = () => {
 
     const getUser = async (email:string) => {
         try {
-            const response = await fetch(`http://192.168.11.150:5000/getuser?email=${email}`);
+            const response = await fetch(`http://192.168.0.15:5000/getuser?email=${email}`);
             const data = await response.json();
             setUserData(data.data);
             return data;
