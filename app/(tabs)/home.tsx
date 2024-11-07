@@ -4,7 +4,6 @@ import ProviderCard from '@/components/ProviderCard'
 import {useUserStore} from "@/store";
 
 
-
 const providers = [
     {
         id: '1',
