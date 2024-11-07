@@ -1,4 +1,3 @@
-// components/EventCard.tsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -27,16 +26,13 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
   return (
       <View style={styles.card}>
-        {/* Información básica del evento */}
         <Text style={styles.title}>{event.type}</Text>
         <Text>{event.date}</Text>
 
-        {/* Botón para expandir la tarjeta */}
         <TouchableOpacity onPress={toggleExpansion}>
           <Text style={styles.toggleButton}>{isExpanded ? 'Ver menos' : 'Ver más'}</Text>
         </TouchableOpacity>
 
-        {/* Detalles adicionales que se muestran cuando se expande */}
         {isExpanded && (
             <View style={styles.details}>
               <Text><Text style={styles.bold}>Ubicación:</Text> {event.ubication}</Text>
