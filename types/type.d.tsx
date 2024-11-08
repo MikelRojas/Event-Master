@@ -2,6 +2,7 @@ export interface ProviderCardProps {
   name: string;
   description: string;
   image: string; // URL de la imagen
+  type: string;
 }
 
 export interface User {
@@ -16,3 +17,19 @@ export interface UserData {
   name: string;
   password: string;
 }
+
+export interface Supplier {
+  description: string,
+  email: string,
+  name: string,
+  type: string,
+  url_image: string
+}
+
+export interface SupplierStore {
+  suppliers: Supplier[];
+  setSuppliers: (supplier: Supplier) => void;
+  clearSuppliers: () => void;
+  isSupplierInList: (supplier: Supplier) => boolean;
+}
+

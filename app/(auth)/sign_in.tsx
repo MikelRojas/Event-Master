@@ -4,7 +4,6 @@ import { Redirect, Link } from "expo-router";
 import {useUserStore} from "@/store";
 import {UserData} from "@/types/type.d";
 
-
 const SignInScreen: React.FC = () => {
     const [emailLogIn, setEmail] = useState('');
     const [passwordIn, setPassword] = useState('');
@@ -13,9 +12,7 @@ const SignInScreen: React.FC = () => {
     const [userData, setUserData] = useState<UserData|null>(null);
 
     const handleSignIn = async () => {
-        //console.log('Iniciando sesión con', emailLogIn, password);
         getUser(emailLogIn);
-        //getUser("mik@gmail.com");
         if(userData){
             if(userData.password == passwordIn){
                 setUser({email: userData.email, name: userData.name, password: userData.password});
@@ -27,7 +24,7 @@ const SignInScreen: React.FC = () => {
 
     const getUser = async (email:string) => {
         try {
-            const response = await fetch(`http://192.168.0.15:5000/getuser?email=${email}`);
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}getuser?email=${email}`);
             const data = await response.json();
             setUserData(data.data);
             return data;
@@ -41,7 +38,7 @@ const SignInScreen: React.FC = () => {
         if(email!=""){
             setEmail(email);
             setPassword(password);
-            handleSignIn()
+            handleSignIn();
         }
     }, []);
 

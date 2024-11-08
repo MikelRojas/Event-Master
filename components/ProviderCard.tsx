@@ -6,12 +6,14 @@ export default function ProviderCard({
  name,
  description,
  image,
+  type,
      }: ProviderCardProps) {
   return (
     <View style={styles.card}>
       <Image source={{ uri: image }} style={styles.image} />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.type}>Category: {type}</Text>
     </View>
   );
 }
@@ -40,5 +42,9 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: '#666',
+  },
+  type: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });

@@ -1,8 +1,5 @@
-// @ts-ignore
-// @ts-ignore
-
 import { create } from 'zustand'
-import {User} from "@/types/type.d";
+import {Supplier, SupplierStore, User} from "@/types/type.d";
 
 export const useUserStore = create<User>((set) => ({
   email: "",
@@ -17,3 +14,14 @@ export const useUserStore = create<User>((set) => ({
   },
 }));
 
+export const useSupplierStore = create<SupplierStore>((set, get) => ({
+  suppliers: [],
+  setSuppliers: (supplier) => set((state) => ({
+    suppliers: [...state.suppliers, supplier],
+  })),
+  clearSuppliers: () => set(() => ({ suppliers: [] })),
+  isSupplierInList: (supplier) => {
+    const state = get();
+    return state.suppliers.some(existingSupplier => existingSupplier.email === supplier.email);
+  }
+}));

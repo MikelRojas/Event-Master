@@ -1,46 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import ProviderCard from '@/components/ProviderCard'
 import {useUserStore} from "@/store";
-
-
-
-const providers = [
-    {
-        id: '1',
-        name: 'Catering Delicioso',
-        description: 'Proveedores de comida gourmet para tu evento.',
-        image: 'https://example.com/catering.jpg', // Cambia por una URL real
-    },
-    {
-        id: '2',
-        name: 'Decoraciones Fantásticas',
-        description: 'Decoraciones únicas para cualquier ocasión.',
-        image: 'https://example.com/decoracion.jpg', // Cambia por una URL real
-    },
-    {
-        id: '3',
-        name: 'Música en Vivo',
-        description: 'Músicos profesionales para amenizar tu evento.',
-        image: 'https://example.com/musica.jpg', // Cambia por una URL real
-    },
-    // Agrega más proveedores según sea necesario
-];
+import {Supplier} from "@/types/type.d";
 
 export default function HomeScreen() {
     const { name } = useUserStore();
+    const [ suppliers, setSuppliers ] = useState<Supplier[]>([]);
+
+    const getSuppliers = async () => {
+        try {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}getsuppliers`);
+            let data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error("Fetch error:", error);
+            throw error;
+        }
+    };
+
+    const fetchSuppliers = async () => {
+        const valor: Supplier[] = await getSuppliers();
+        setSuppliers(valor);
+    };
+
+    useEffect(() => {
+        fetchSuppliers();
+    }, []);
+    
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Bienvenido {name}</Text>
             <Text style={styles.subtitle}>Lista de posibles proveedores:</Text>
             <FlatList
-                data={providers}
-                keyExtractor={(item) => item.id}
+                data={suppliers}
+                keyExtractor={(item) => item.email}
                 renderItem={({ item }) => (
                     <ProviderCard
                         name={item.name}
                         description={item.description}
-                        image={item.image}
+                        image={item.url_image}
+                        type={item.type}
                     />
                 )}
                 horizontal

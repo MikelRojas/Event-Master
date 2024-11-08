@@ -9,7 +9,7 @@ const profile: React.FC = () => {
 
     const { t } = useTranslation();
 
-    const changeLanguage = (lng) => {
+    const changeLanguage = (lng: string | undefined) => {
         i18next.changeLanguage(lng);
     };
 

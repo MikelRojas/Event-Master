@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import {Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Pressable} from "react-native";
 import { Calendar } from 'react-native-calendars';
 import MapView, { Marker } from 'react-native-maps';
+import {Href, Redirect, router} from "expo-router";
+import EventCard from "@/components/EventCard";
+import SupplierSelector from "@/components/SupplierSelector";
+import {useSupplierStore} from "@/store";
+import SupplierSelected from "@/components/SupplierSelected";
 
 const createEvents = () => {
     const [selectedDate, setSelectedDate] = useState('');
@@ -11,11 +16,16 @@ const createEvents = () => {
     const [locationDetails, setLocationDetails] = useState('');
     const [location, setLocation] = useState({ latitude: 10.3450, longitude: -84.5012 }); // Ciudad Quesada
     const [providers, setProviders] = useState('');
+    const {suppliers} = useSupplierStore();
 
-    const handleDayPress = (day) => {
+    const handleDayPress = (day: { dateString: React.SetStateAction<string>; }) => {
         setSelectedDate(day.dateString);
         setShowCalendar(false);
     };
+
+    const handleCreateEvent = () => {
+      console.log(`${selectedDate},${startTime},${endTime},${locationDetails},${locationDetails}`);
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -82,16 +92,31 @@ const createEvents = () => {
                 <Marker coordinate={location} />
             </MapView>
 
-            <Text style={styles.subtitle}>Seleccionar proveedores</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Escribe aquí los proveedores"
-                placeholderTextColor="#888"
-                value={providers}
-                onChangeText={setProviders}
-            />
+          <View style={styles.container}>
+            <Text style={styles.subtitle}>My Suppliers</Text>
+            <ScrollView>
+              {suppliers.map((e, index) => (
+                <SupplierSelected
+                  supplier={e}
+                />
+              ))}
+            </ScrollView>
+          </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => { /* Aquí puedes agregar la acción más tarde */ }}>
+            <Pressable
+              onPress={()=>{
+                router.push("/select_supplier" as Href);
+              }}
+              style={[
+                styles.button,
+              ]}
+            >
+              <Text style={styles.buttonText}>
+                Add Supplier
+              </Text>
+            </Pressable>
+
+            <TouchableOpacity style={styles.button} onPress={handleCreateEvent}>
                 <Text style={styles.buttonText}>Crear evento y cotizar</Text>
             </TouchableOpacity>
         </ScrollView>
@@ -117,6 +142,14 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         width: '100%',
     },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    borderRadius: 5,
+    backgroundColor: '#007BFF',
+    marginTop: 10,
+  },
     input: {
         height: 40,
         borderColor: '#ccc',
@@ -124,13 +157,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         width: '100%',
-        marginBottom: 16,
-    },
-    button: {
-        backgroundColor: '#007BFF',
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
         marginBottom: 16,
     },
     buttonText: {
