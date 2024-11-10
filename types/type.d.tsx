@@ -31,5 +31,6 @@ export interface SupplierStore {
   setSuppliers: (supplier: Supplier) => void;
   clearSuppliers: () => void;
   isSupplierInList: (supplier: Supplier) => boolean;
+  deleteSupplier: (supplier: Supplier) => void;
 }
 

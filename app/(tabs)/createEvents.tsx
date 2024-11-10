@@ -2,29 +2,81 @@ import React, { useState } from 'react';
 import {Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Pressable} from "react-native";
 import { Calendar } from 'react-native-calendars';
 import MapView, { Marker } from 'react-native-maps';
-import {Href, Redirect, router} from "expo-router";
-import EventCard from "@/components/EventCard";
-import SupplierSelector from "@/components/SupplierSelector";
-import {useSupplierStore} from "@/store";
+import { Alert } from 'react-native';
+import {Href, router} from "expo-router";
+import {useSupplierStore, useUserStore} from "@/store";
 import SupplierSelected from "@/components/SupplierSelected";
 
 const createEvents = () => {
     const [selectedDate, setSelectedDate] = useState('');
+    const [details, setDetails] = useState('');
     const [showCalendar, setShowCalendar] = useState(false);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [locationDetails, setLocationDetails] = useState('');
     const [location, setLocation] = useState({ latitude: 10.3450, longitude: -84.5012 }); // Ciudad Quesada
-    const [providers, setProviders] = useState('');
-    const {suppliers} = useSupplierStore();
+    const {suppliers,clearSuppliers} = useSupplierStore();
+    const {email} = useUserStore();
 
     const handleDayPress = (day: { dateString: React.SetStateAction<string>; }) => {
         setSelectedDate(day.dateString);
         setShowCalendar(false);
     };
 
-    const handleCreateEvent = () => {
+    const handleCreateEvent = async () => {
+      if (!selectedDate || !details || !startTime || !endTime || !locationDetails) {
+        Alert.alert("Error", "Por favor, completa todos los campos.");
+        return;
+      }
+
+      if (suppliers.length === 0) {
+        Alert.alert("Error", "Por favor, agrega al menos un proveedor.");
+        return;
+      }
       console.log(`${selectedDate},${startTime},${endTime},${locationDetails},${locationDetails}`);
+      try {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}create_event`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email_user: email,
+            date_event: selectedDate,
+            details: details,
+            start_time: startTime,
+            end_time: endTime,
+            ubication: locationDetails,
+          }),
+        });
+
+        const result = await response.json();
+        if(result.state){
+          const id = result.data.event_id;
+          console.log(id);
+          suppliers.map(async (supplier) => {
+            await fetch(`${process.env.EXPO_PUBLIC_API_URL}create_contracted_service`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id_event: id,
+                email_supplier: supplier.email,
+                state: false,
+              }),
+            });
+          })
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+      setSelectedDate('');
+      setDetails('');
+      setStartTime('');
+      setEndTime('');
+      setLocationDetails('');
+      clearSuppliers();
     }
 
     return (
@@ -35,6 +87,7 @@ const createEvents = () => {
                 style={styles.input}
                 placeholder="Escribe aquí el tipo de evento"
                 placeholderTextColor="#888"
+                onChangeText={setDetails}
             />
             <Text style={styles.subtitle}>Escoge el día de tu evento</Text>
             <TouchableOpacity style={styles.button} onPress={() => setShowCalendar(true)}>

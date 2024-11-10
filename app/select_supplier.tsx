@@ -1,24 +1,61 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { ScrollView, View, StyleSheet, Text, Pressable } from 'react-native';
 import {Supplier} from "@/types/type.d";
 import SupplierSelector from "@/components/SupplierSelector";
-
-const event: Supplier[] = [
-    {
-        name: "string",
-        description: "string",
-        url_image: "string",
-        type: "string",
-        email: "string",
-    }
-];
+import {useSupplierStore, useUserStore} from "@/store";
 
 const Events: React.FC = () => {
     const [selectedType, setSelectedType] = useState<string>(''); // Estado para el tipo seleccionado
-
+    const [ suppliersS, setSuppliers ] = useState<Supplier[]>([]);
+    const [ filteredSuppliers, setFilteredSuppliers ] = useState<Supplier[]>([]);
+    const {suppliers} = useSupplierStore();
     const handleTypeSelect = (type: string) => {
-        setSelectedType(type); // Actualiza el tipo seleccionado
+        setSelectedType(type);
     };
+
+
+    const getSuppliers = async () => {
+        try {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}getsuppliers`);
+            let data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error("Fetch error:", error);
+            throw error;
+        }
+    };
+
+    const removeExistingSuppliers = (receivedSuppliers: Supplier[]) => {
+        setSuppliers((currentSuppliers) =>
+          currentSuppliers.filter(
+            (supplier) =>
+              !receivedSuppliers.some(
+                (received) => received.email === supplier.email
+              )
+          )
+        );
+    };
+
+    const fetchSuppliers = async () => {
+        const valor: Supplier[] = await getSuppliers();
+        setSuppliers(valor);
+        setFilteredSuppliers(valor);
+        removeExistingSuppliers(suppliers);
+        setSelectedType("Decoration");
+    };
+
+    useEffect(() => {
+        fetchSuppliers();
+    }, []);
+
+    useEffect(() => {
+        setFilteredSuppliers(
+          suppliersS.filter(
+            (supplier) => supplier.type.toLowerCase() === selectedType.toLowerCase()
+          )
+        );
+    }, [selectedType, suppliersS]); // Vuelve a filtrar cuando `selectedType` o `suppliersS` cambien
+
 
     return (
       <View style={styles.container}>
@@ -42,9 +79,8 @@ const Events: React.FC = () => {
               ))}
           </View>
 
-          {/* Lista de Suppliers */}
           <ScrollView>
-              {event.map((e, index) => (
+              {filteredSuppliers.map((e) => (
                 <SupplierSelector
                   supplier={e}
                 />
@@ -56,6 +92,7 @@ const Events: React.FC = () => {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 30,
         flex: 1,
         padding: 15,
         backgroundColor: '#f5f5f5',

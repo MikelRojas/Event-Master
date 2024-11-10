@@ -2,26 +2,16 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import i18next from "@/services/i18next";
 import { useTranslation } from "react-i18next";
+import {useUserStore} from "@/store";
 
 const profile: React.FC = () => {
-    const [name, setName] = useState<string>("Juan Pérez");
-    const [email, setEmail] = useState<string>("juan.perez@example.com");
+    const {email,name} = useUserStore();
 
     const { t } = useTranslation();
 
     const changeLanguage = (lng: string | undefined) => {
         i18next.changeLanguage(lng);
     };
-
-    //Mikel esta es la funcion que tiene que cambiar para que muestre el nombre y el email bien
-    const handleProfileData = () => {
-        setName("Ana García");
-        setEmail("ana.garcia@example.com");
-    };
-
-    useEffect(() => {
-        handleProfileData();
-    }, []);
 
     return (
         <View style={styles.container}>

@@ -58,11 +58,13 @@ const styles = StyleSheet.create({
   },
   details: {
     marginTop: 10,
+    marginBottom: 10,
   },
   bold: {
     fontWeight: 'bold',
   },
   image: {
+    marginTop: 10,
     width: '100%',
     height: 150,
     borderRadius: 8,

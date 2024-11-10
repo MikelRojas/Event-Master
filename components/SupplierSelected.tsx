@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import {Supplier} from "@/types/type.d";
+import {Href, router} from "expo-router";
+import {useSupplierStore} from "@/store";
 
 function SupplierSeled({ supplier }: { supplier: Supplier }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { deleteSupplier } = useSupplierStore();
   const toggleExpansion = () => {
     setIsExpanded(prevState => !prevState);
   };
@@ -23,6 +26,9 @@ function SupplierSeled({ supplier }: { supplier: Supplier }) {
           <Image source={{ uri: supplier.url_image }} style={styles.image} />
         </View>
       )}
+      <Button color={"red"} title="Delete" onPress={()=>{
+        deleteSupplier(supplier);
+      }} />
     </View>
   );
 }

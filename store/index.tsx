@@ -23,5 +23,8 @@ export const useSupplierStore = create<SupplierStore>((set, get) => ({
   isSupplierInList: (supplier) => {
     const state = get();
     return state.suppliers.some(existingSupplier => existingSupplier.email === supplier.email);
-  }
+  },
+  deleteSupplier: (supplier) => set((state) => ({
+    suppliers: state.suppliers.filter(existingSupplier => existingSupplier.email !== supplier.email)
+  })),
 }));
