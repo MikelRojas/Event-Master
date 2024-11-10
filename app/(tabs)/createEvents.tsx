@@ -68,6 +68,7 @@ const createEvents = () => {
             });
           })
         }
+        Alert.alert("Exito", "Evento creado.");
       } catch (error) {
         console.error('Error:', error);
       }
@@ -169,7 +170,7 @@ const createEvents = () => {
               </Text>
             </Pressable>
 
-            <TouchableOpacity style={styles.button} onPress={handleCreateEvent}>
+            <TouchableOpacity style={styles.buttonCreate} onPress={handleCreateEvent}>
                 <Text style={styles.buttonText}>Crear evento y cotizar</Text>
             </TouchableOpacity>
         </ScrollView>
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 16,
         backgroundColor: 'white',
+        marginTop: 10,
     },
     title: {
         fontSize: 24,
@@ -202,6 +204,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#007BFF',
     marginTop: 10,
+  },
+  buttonCreate: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    borderRadius: 5,
+    backgroundColor: '#007BFF',
+    marginTop: 10,
+    marginBottom: 20,
   },
     input: {
         height: 40,

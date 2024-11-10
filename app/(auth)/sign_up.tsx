@@ -1,23 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import {Link, Redirect} from "expo-router"; // Asegúrate de importar Link
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
+import {Href, Link, Redirect, router} from "expo-router";
+import {useUserStore} from "@/store"; // Asegúrate de importar Link
 
 const SignUpScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     const [name, setName] = useState(''); // Nuevo estado para el nombre
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSignedUp, setIsSignedUp] = useState(false);
+    const {setUser} = useUserStore();
 
+    const handleSignUp = async () => {
+      if (!name || !email || !password) {
+        Alert.alert("Error", "Por favor, completa todos los campos.");
+        return;
+      }
 
-    const handleSignUp = () => {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}create_client`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          name: name,
+          password: password,
+        }),
+      });
+      const json = await response.json();
+      if(json.state){
         console.log('Registrando con', name, email, password);
+        setUser({email: email, name: name, password: password});
+        Alert.alert("Exito", "Usuario registrado");
         setIsSignedUp(true);
+      }
     };
 
-    // Redirecciona si el usuario ha iniciado sesión
-    if (isSignedUp) {
-        return <Redirect href="/(tabs)/home" />;
+  useEffect(() => {
+    if(isSignedUp){
+      router.push("/(tabs)/home" as Href);
     }
+  }, [isSignedUp]);
 
     return (
         <View style={styles.container}>

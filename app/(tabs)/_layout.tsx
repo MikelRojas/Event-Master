@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -28,7 +27,7 @@ export default function TabLayout() {
             options={{
                 title: 'Create Events',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'add' : 'add-outline'} color={color} />
                 ),
             }}
         />
@@ -37,7 +36,7 @@ export default function TabLayout() {
             options={{
                 title: 'Events',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
                 ),
             }}
         />
@@ -46,7 +45,7 @@ export default function TabLayout() {
             options={{
                 title: 'Profile',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
                 ),
             }}
         />

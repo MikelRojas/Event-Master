@@ -34,3 +34,18 @@ export interface SupplierStore {
   deleteSupplier: (supplier: Supplier) => void;
 }
 
+export interface ContractedSupplier {
+ email_supplier: string;
+  state: boolean;
+}
+
+export interface Event{
+  id: string;
+  email_user: string;
+  type: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  ubication: string;
+  suppliers: ContractedSupplier[];
+}
