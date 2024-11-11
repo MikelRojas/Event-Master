@@ -3,10 +3,12 @@ import { ScrollView, View, StyleSheet, Text } from 'react-native';
 import EventCard from '@/components/EventCard';
 import {Event} from "@/types/type.d";
 import {useUserStore} from "@/store";
+import { useTranslation } from 'react-i18next';
 
 const events: React.FC = () => {
     const [myEvents, setMyEvents] = useState<Event[]>([]);
     const {email} = useUserStore();
+    const { t } = useTranslation();
 
     const getUser = async () => {
         try {
@@ -24,7 +26,7 @@ const events: React.FC = () => {
     }, [myEvents,email]);
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Mis eventos</Text>
+            <Text style={styles.header}>{t('my_events')}</Text>
             <ScrollView>
                 {myEvents.map(e => (
                     <EventCard key={e.id} event={e} />

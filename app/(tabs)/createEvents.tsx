@@ -6,6 +6,7 @@ import { Alert } from 'react-native';
 import {Href, router} from "expo-router";
 import {useSupplierStore, useUserStore} from "@/store";
 import SupplierSelected from "@/components/SupplierSelected";
+import { useTranslation } from 'react-i18next';
 
 const createEvents = () => {
     const [selectedDate, setSelectedDate] = useState('');
@@ -17,6 +18,7 @@ const createEvents = () => {
     const [location, setLocation] = useState({ latitude: 10.3450, longitude: -84.5012 }); // Ciudad Quesada
     const {suppliers,clearSuppliers} = useSupplierStore();
     const {email} = useUserStore();
+    const { t } = useTranslation();
 
     const handleDayPress = (day: { dateString: React.SetStateAction<string>; }) => {
         setSelectedDate(day.dateString);
@@ -82,17 +84,17 @@ const createEvents = () => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Crear Evento</Text>
-            <Text style={styles.subtitle}>Tipo de evento</Text>
+            <Text style={styles.title}>{t("create_event")}</Text>
+            <Text style={styles.subtitle}>{t("event_type")}</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Escribe aquí el tipo de evento"
+                placeholder={t("event_type")}
                 placeholderTextColor="#888"
                 onChangeText={setDetails}
             />
-            <Text style={styles.subtitle}>Escoge el día de tu evento</Text>
+            <Text style={styles.subtitle}>{t("select_day")}</Text>
             <TouchableOpacity style={styles.button} onPress={() => setShowCalendar(true)}>
-                <Text style={styles.buttonText}>{selectedDate ? selectedDate : 'Abrir Calendario'}</Text>
+                <Text style={styles.buttonText}>{selectedDate ? selectedDate : t("open_calendar")}</Text>
             </TouchableOpacity>
             {showCalendar && (
                 <View style={styles.calendarContainer}>
@@ -105,7 +107,7 @@ const createEvents = () => {
                 </View>
             )}
 
-            <Text style={styles.subtitle}>Hora de inicio</Text>
+            <Text style={styles.subtitle}>{t("start_time")}</Text>
             <TextInput
                 style={styles.input}
                 placeholder="HH:MM"
@@ -114,7 +116,7 @@ const createEvents = () => {
                 onChangeText={setStartTime}
             />
 
-            <Text style={styles.subtitle}>Hora de finalización</Text>
+            <Text style={styles.subtitle}>{t("end_time")}</Text>
             <TextInput
                 style={styles.input}
                 placeholder="HH:MM"
@@ -123,20 +125,20 @@ const createEvents = () => {
                 onChangeText={setEndTime}
             />
 
-            <Text style={styles.subtitle}>Detalles de la ubicación</Text>
+            <Text style={styles.subtitle}>{t("location_details")}</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Escribe la ubicación aquí"
+                placeholder={t("location_details")}
                 placeholderTextColor="#888"
                 value={locationDetails}
                 onChangeText={setLocationDetails}
             />
 
-            <Text style={styles.subtitle}>Ubicación en el mapa</Text>
+            <Text style={styles.subtitle}>{t("location_map")}</Text>
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: 10.3450, // Ciudad Quesada
+                    latitude: 10.3450,
                     longitude: -84.5012,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
@@ -147,7 +149,7 @@ const createEvents = () => {
             </MapView>
 
           <View style={styles.container}>
-            <Text style={styles.subtitle}>My Suppliers</Text>
+            <Text style={styles.subtitle}>{t("my_suppliers")}</Text>
             <ScrollView>
               {suppliers.map((e, index) => (
                 <SupplierSelected
@@ -166,12 +168,12 @@ const createEvents = () => {
               ]}
             >
               <Text style={styles.buttonText}>
-                Add Supplier
+                  {t("add_supplier")}
               </Text>
             </Pressable>
 
             <TouchableOpacity style={styles.buttonCreate} onPress={handleCreateEvent}>
-                <Text style={styles.buttonText}>Crear evento y cotizar</Text>
+                <Text style={styles.buttonText}>{t("create_event_and_quote")}</Text>
             </TouchableOpacity>
         </ScrollView>
     );

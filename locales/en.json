@@ -4,5 +4,22 @@
   "email": "Email",
   "english": "English",
   "spanish": "Spanish",
-  "language": "Select Language"
+  "language": "Select Language",
+  "welcome": "Welcome ",
+  "subtitle": "List of possible suppliers:",
+  "my_events": "My Events",
+  "create_event": "Create Event",
+  "event_type": "Event Type",
+  "select_day": "Select the day of your event",
+  "open_calendar": "Open Calendar",
+  "start_time": "Start Time",
+  "end_time": "End Time",
+  "location_details": "Location Details",
+  "location_map": "Location on the Map",
+  "my_suppliers": "My Suppliers",
+  "add_supplier": "Add Supplier",
+  "create_event_and_quote": "Create event and quote",
+  "error_fill_fields": "Please fill in all fields.",
+  "error_add_supplier": "Please add at least one supplier.",
+  "success_event_created": "Event created successfully."
 }

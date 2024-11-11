@@ -3,10 +3,12 @@ import { View, Text, FlatList, StyleSheet } from 'react-native';
 import ProviderCard from '@/components/ProviderCard'
 import {useUserStore} from "@/store";
 import {Supplier} from "@/types/type.d";
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen() {
     const { name } = useUserStore();
     const [ suppliers, setSuppliers ] = useState<Supplier[]>([]);
+    const { t } = useTranslation();
 
     const getSuppliers = async () => {
         try {
@@ -30,9 +32,10 @@ export default function HomeScreen() {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Bienvenido {name}</Text>
-            <Text style={styles.subtitle}>Lista de posibles proveedores:</Text>
+            <Text style={styles.title}>{t('welcome')} {name}</Text>
+            <Text style={styles.subtitle}>{t('subtitle')}</Text>
             <FlatList
+                showsHorizontalScrollIndicator={true}
                 data={suppliers}
                 keyExtractor={(item) => item.email}
                 renderItem={({ item }) => (
@@ -43,9 +46,8 @@ export default function HomeScreen() {
                         type={item.type}
                     />
                 )}
-                horizontal
-                showsHorizontalScrollIndicator={false}
             />
+
         </View>
     );
 }
